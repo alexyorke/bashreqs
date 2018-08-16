@@ -17,6 +17,7 @@ def parseLine(aLine):
 
     commandNodePrev = False
     for line in output:
+	    # ugly hack: print the nodes and then parse them via string interpretation
             if "WordNode" in line and commandNodePrev:
                     commands.add(line.split("word='")[1][:-3])
             if "CommandNode" in line:
