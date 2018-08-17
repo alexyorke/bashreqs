@@ -9,68 +9,15 @@ Here's a report generated from https://github.com/topkecleon/telegram-bot-bash/b
 
 
 ```
-Installed via APT:
-sed:
-  Installed: 4.4-1
-  Candidate: 4.4-1
-  Version table:
- *** 4.4-1 500
-        500 http://http.debian.net/debian stretch/main amd64 Packages
-        100 /var/lib/dpkg/status
-
-grep:
-  Installed: 2.27-2
-  Candidate: 2.27-2
-  Version table:
- *** 2.27-2 500
-        500 http://http.debian.net/debian stretch/main amd64 Packages
-        100 /var/lib/dpkg/status
-
-less:
-  Installed: 481-2.1
-  Candidate: 481-2.1
-  Version table:
- *** 481-2.1 500
-        500 http://http.debian.net/debian stretch/main amd64 Packages
-        100 /var/lib/dpkg/status
-
-tmux:
-  Installed: 2.3-4
-  Candidate: 2.3-4
-  Version table:
- *** 2.3-4 500
-        500 http://http.debian.net/debian stretch/main amd64 Packages
-        100 /var/lib/dpkg/status
-
-git:
-  Installed: 1:2.11.0-3+deb9u2
-  Candidate: 1:2.11.0-3+deb9u3
-  Version table:
-     1:2.11.0-3+deb9u3 500
-        500 http://http.debian.net/debian stretch/main amd64 Packages
- *** 1:2.11.0-3+deb9u2 100
-        100 /var/lib/dpkg/status
-
-curl:
-  Installed: 7.52.1-5+deb9u3
-  Candidate: 7.52.1-5+deb9u6
-  Version table:
-     7.52.1-5+deb9u6 500
-        500 http://http.debian.net/debian stretch/main amd64 Packages
- *** 7.52.1-5+deb9u3 100
-        100 /var/lib/dpkg/status
-
-Installed via other methods:
-/bin/echo
-/usr/bin/clear
-/bin/egrep
-/usr/bin/wc
-/usr/bin/[
-/bin/rm
-/usr/bin/tail
-/bin/cat
-/usr/bin/cut
-/usr/bin/mkfifo
+klibc-utils==2.0.4-9 # because of /bin/cat
+sed==4.4-1
+tmux==2.3-4
+less==481-2.1
+bash==4.4-5 # because of /usr/bin/clear
+grep==2.27-2 # because of /bin/egrep, 
+curl==7.52.1-5+deb9u3
+git==1:2.11.0-3+deb9u2
+coreutils==8.26-3 # because of /usr/bin/wc, /bin/rm, /usr/bin/tail, /usr/bin/cut, /bin/echo, /usr/bin/mkfifo
 ```
 
 ## Roadmap
