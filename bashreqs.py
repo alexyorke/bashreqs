@@ -55,7 +55,8 @@ def special_match(strg, search=re.compile(r'[^a-zA-Z0-9._]').search):
 
 # adds the package and path to the installedViaApt variable, which will print
 # a report at the end
-def addToInstalledApt(command, path):
+def addToInstalledApt(command, version, path):
+	command = command + "==" + version
 	if (command in installedViaApt):
 		installedViaApt[command].append(path)
 	else:
@@ -63,6 +64,29 @@ def addToInstalledApt(command, path):
 			installedViaApt[command] = []
 		else:
 			installedViaApt[command] = [path]
+
+def checkForExecCalls(pathToExec):
+	if (len(pathToExec.strip()) == 0):
+		return []
+
+	foundCalls = []
+	execCalls = ["execl", "execle", "execlp", "execv", "execve", "execvp", "vfork"]
+
+	# find all system calls in executable with nm. Hide all errors due to permissions,
+	# or if the file is not an executable (e.g. a script)
+	result = subprocess.run(['nm', '-Dp', pathToExec], stdout=subprocess.PIPE, stderr=open('os.devnull', 'w')).stdout.decode('utf-8')
+	for syscall in result.split("\n"):
+		for execCall in execCalls:
+			if ("U " + execCall) in syscall:
+				foundCalls.append(execCall)
+	return foundCalls
+
+def printFoundExecCalls(pathToExec):
+	# check executables for calls to exec, which means that they could call another
+	# program, meaning that bashreq may not have found another requirement
+	possibleExecCalls = checkForExecCalls(whereIsItInstalled)
+	if len(possibleExecCalls) != 0:
+		print("# warning: " + pathToExec + " calls " + ", ".join(possibleExecCalls) + " which could cause missing req")
 
 for command in commands:
 	# if it's unlikely to be a command, skip it
@@ -72,6 +96,11 @@ for command in commands:
 	# try to see if the package name is the same as the executable
 	result = subprocess.run(['apt-cache', 'policy', command], stdout=subprocess.PIPE)
 	finalResult = result.stdout.decode('utf-8')
+
+	# try to find path to executable (try)
+	whereIsItInstalled = subprocess.run(['which', command], stdout=subprocess.PIPE)
+	whereIsItInstalled = whereIsItInstalled.stdout.decode('utf-8').strip()
+
 	if (len(finalResult.strip()) == 0) or ("Installed: (none)" in finalResult):
 		# package does not exist in apt, or not installed via apt-get
 		# might be installed in another package (e.g. coreutils) which provides
@@ -82,12 +111,9 @@ for command in commands:
 		dpkgResults = subprocess.run(['dpkg', '-S', command], stdout=subprocess.PIPE, stderr=open(os.devnull, 'w'))
 		dpkgResults = dpkgResults.stdout.decode('utf-8')
 
-		# try to find path to executable
-		whereIsItInstalled = subprocess.run(['which', command], stdout=subprocess.PIPE)
-		whereIsItInstalled = whereIsItInstalled.stdout.decode('utf-8').strip()
-
 		# if there are no dpkg results, then just list where the executable is
 		if (len(dpkgResults.strip()) == 0):
+			printFoundExecCalls(whereIsItInstalled)
 			installedOther.append(whereIsItInstalled)
 		else:
 			# otherwise, try to find the package it came from
@@ -97,14 +123,20 @@ for command in commands:
 					# found the executable's path associated with package name
 					# grab the package name and add it to packages
 					package = aPath.split(":")[0]
-					addToInstalledApt(package + "==" + getAptPackageVersion(package), whereIsItInstalled)
+
+					# check executables for calls to exec, which means that they could call another
+					# program, meaning that bashreq may not have found another requirement
+
+					addToInstalledApt(package, getAptPackageVersion(package), whereIsItInstalled)
 					break
 	else:
 		# the executable's name is same as apt package; just add to requirements
 		finalResult = finalResult.split("\n")
 		package = finalResult[0]
 		packageVersion = finalResult[1].split("Installed: ")[1]
-		addToInstalledApt(package[:-1] + "==" + packageVersion, "")
+		addToInstalledApt(package[:-1], packageVersion, "")
+
+	printFoundExecCalls(whereIsItInstalled)
 
 
 
