@@ -72,7 +72,7 @@ for command in commands:
 	# try to see if the package name is the same as the executable
 	result = subprocess.run(['apt-cache', 'policy', command], stdout=subprocess.PIPE)
 	finalResult = result.stdout.decode('utf-8')
-	if (len(finalResult) == 0) or ("Installed: (none)" in finalResult):
+	if (len(finalResult.strip()) == 0) or ("Installed: (none)" in finalResult):
 		# package does not exist in apt, or not installed via apt-get
 		# might be installed in another package (e.g. coreutils) which provides
 		# other executables under a different package name
@@ -93,7 +93,7 @@ for command in commands:
 			# otherwise, try to find the package it came from
 			dpkgResultsLines = dpkgResults.split("\n")
 			for aPath in dpkgResultsLines:
-				if (whereIsItInstalled in aPath) and (len(whereIsItInstalled.strip()) != 0):
+				if (len(whereIsItInstalled) != 0) and (whereIsItInstalled == aPath.split(": ")[1]):
 					# found the executable's path associated with package name
 					# grab the package name and add it to packages
 					package = aPath.split(":")[0]
@@ -107,15 +107,16 @@ for command in commands:
 		addToInstalledApt(package[:-1] + "==" + packageVersion, "")
 
 
+
 # print reports
-for package, paths in installedViaApt.items():
+for package, paths in sorted(installedViaApt.items()):
 	if len(paths) != 0:
 		print(package + " # because of " + ", ".join(paths))
 	else:
 		print(package)
 
 if len("".join(installedOther).strip()) != 0:
-	print("Installed via other methods:")
+	print("# Installed via other methods:")
 	for other in installedOther:
 		if (len(other.strip()) != 0):
-			print(other.strip())
+			print("# " + other.strip())
