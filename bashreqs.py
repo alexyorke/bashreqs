@@ -26,6 +26,18 @@ def parseLine(aLine):
             else:
                     commandNodePrev = False
 
+# find packages which were installed from .deb file, or cannot be installed anymore
+obsoletePackagesReport = []
+
+obsoletePackages = subprocess.run(['aptitude', 'search', '?obsolete'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+obsoletePackages = obsoletePackages.stdout.decode('utf-8').strip()
+for obsoletePackage in obsoletePackages.split("\n"):
+	# https://askubuntu.com/questions/98223/how-do-i-get-a-list-of-obsolete-packages
+	obsoletePackage = obsoletePackage.strip()
+	if (len(obsoletePackage) != 0):
+		if (obsoletePackage[0] == "i"): # "meaning that the package is installed"
+			obsoletePackagesReport.append(obsoletePackage[3:].strip().split(" ")[0])
+
 def getAptPackageVersion(package):
 	result = subprocess.run(['apt-cache', 'policy', package], stdout=subprocess.PIPE)
 	result = result.stdout.decode('utf-8')
@@ -52,10 +64,15 @@ installedOther = []
 # this reduces false positives when extracting commands
 def special_match(strg, search=re.compile(r'[^a-zA-Z0-9._]').search):
 	return not bool(search(strg))
-
+		
+def checkIfPackageIsObsolete(package):
+	if (package in obsoletePackagesReport):
+			print("# warning: " + package + " is obsolete and cannot be installed.")
+			
 # adds the package and path to the installedViaApt variable, which will print
 # a report at the end
 def addToInstalledApt(command, version, path):
+	checkIfPackageIsObsolete(command)
 	command = command + "==" + version
 	if (command in installedViaApt):
 		installedViaApt[command].append(path)
@@ -88,6 +105,7 @@ def printFoundExecCalls(pathToExec):
 	if len(possibleExecCalls) != 0:
 		print("# warning: " + pathToExec + " calls " + ", ".join(possibleExecCalls) + " which could cause missing req")
 
+			
 for command in commands:
 	# if it's unlikely to be a command, skip it
 	if not special_match(command):
@@ -126,7 +144,6 @@ for command in commands:
 
 					# check executables for calls to exec, which means that they could call another
 					# program, meaning that bashreq may not have found another requirement
-
 					addToInstalledApt(package, getAptPackageVersion(package), whereIsItInstalled)
 					break
 	else:
@@ -137,8 +154,6 @@ for command in commands:
 		addToInstalledApt(package[:-1], packageVersion, "")
 
 	printFoundExecCalls(whereIsItInstalled)
-
-
 
 # print reports
 for package, paths in sorted(installedViaApt.items()):
@@ -152,3 +167,4 @@ if len("".join(installedOther).strip()) != 0:
 	for other in installedOther:
 		if (len(other.strip()) != 0):
 			print("# " + other.strip())
+
