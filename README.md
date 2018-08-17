@@ -72,3 +72,7 @@ Installed via other methods:
 /usr/bin/cut
 /usr/bin/mkfifo
 ```
+
+## Roadmap
+
+Detect if an executable contains any system calls to execl, execle, execlp, execv, execve, execvp, or vfork as the executable may run another program (for example, the executable strace can run another program.) If this condition is true, the executable will be investigated to determine if it actually runs another program, and what position the program must be in to run it in the command line arguments. This allows the program's command line argument(s) to be interpreted as a command, and so will be added to the bashreqs list (http://refspecs.linuxbase.org/LSB_1.3.0/PPC64/spec/baselib.html). The program `nm` can find all system calls.
