@@ -3,7 +3,7 @@ pipreqs for bash scripts. Not affiliated with pipreqs.
 
 Run `python3 bashreqs.py path-to-bash-script` to generate a report containing all of the packages needed to run a bash script. This repo is still in beta, so weird things might happen.
 
-`bashreqs` assumes that the script runs fine on your computer before it searches for packages (this app should be run on the developer's computer to generate the dependency requirements.) However, **finding requirements, even if the package is not installed on your local computer** would be an awesome feature to add to `bashreqs.`
+`bashreqs` assumes that the script runs fine on your computer before it searches for packages (this app should be run on the developer's computer to generate the dependency requirements.) However, **finding requirements, even if the package is not installed on your local computer** would be an awesome feature to add to `bashreqs.` Having said that, `bashreqs` will notify you if the bash program contains a package which is obsolete (i.e. cannot be re-installed on another computer, because it was installed from a deb file, or is no longer available in the official repos.)
 
 Here's a report generated from https://github.com/topkecleon/telegram-bot-bash/blob/master/bashbot.sh (not affiliated with telegram-bot-bash):
 
