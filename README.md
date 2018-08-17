@@ -9,15 +9,14 @@ Here's a report generated from https://github.com/topkecleon/telegram-bot-bash/b
 
 
 ```
-klibc-utils==2.0.4-9 # because of /bin/cat
-sed==4.4-1
-tmux==2.3-4
-less==481-2.1
-bash==4.4-5 # because of /usr/bin/clear
-grep==2.27-2 # because of /bin/egrep, 
+coreutils==8.26-3 # because of /bin/rm, /usr/bin/wc, /bin/cat, /usr/bin/tail, /usr/bin/mkfifo, /bin/echo, /usr/bin/cut
 curl==7.52.1-5+deb9u3
 git==1:2.11.0-3+deb9u2
-coreutils==8.26-3 # because of /usr/bin/wc, /bin/rm, /usr/bin/tail, /usr/bin/cut, /bin/echo, /usr/bin/mkfifo
+grep==2.27-2 # because of /bin/egrep
+less==481-2.1
+ncurses-bin==6.0+20161126-1+deb9u1 # because of /usr/bin/clear
+sed==4.4-1
+tmux==2.3-4
 ```
 
 ## Roadmap
