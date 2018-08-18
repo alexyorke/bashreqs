@@ -23,6 +23,10 @@ tmux==2.3-4
 
 `bashreqs` generates warnings for executables which contain a system call that could instantiate another program. This means that the command-line arguments to a program (e.g. `strace <command>`) might supervise another executable, or just a string (in which case `bashreq` may not be able to sufficiently determine the requirements.) For example, `strace echo hello` has two requirements: `strace` and `echo`, but `bashreq` only sees `strace`, and so generates a warning because `strace`'s executable contains an exec call (allowing it to run arbitrary programs, such as echo.)
 
+## Report too bloated? Want to hide common utils like echo, bash, and sed for example?
+
+No problem. `bashreqs` lets you hide the top x% of packages installed on Ubuntu computers. For example, `ncurses-base` is installed on 99.877% of computers (from the popcon data), so it's highly unlikely that a user will need to install it, as they probably already have it installed.
+
 ## Dependency-free executable
 
 Head on over to https://github.com/Decagon/bashreqs/releases/tag/v0.1-alpha to find a Linux executable which is dependency-less (except for the shell commands which are probably pre-installed.) No Python needed.
