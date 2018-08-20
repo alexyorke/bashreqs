@@ -1,7 +1,11 @@
 # bashreqs
 pipreqs for bash scripts. Not affiliated with pipreqs.
 
-Run `python3 bashreqs.py path-to-bash-script` to generate a report containing all of the packages needed to run a bash script. This repo is still in beta, so weird things might happen.
+After cloning, run `pip3 install -r requirement.txt` then `python3 bashreqs.py path-to-bash-script` to generate a report containing all of the Debian and Ubuntu-based packages needed to run a bash script. If the executables are not packages, then `bashreqs` will just list the path to the executable.
+
+## Requirements
+
+Needs `apt-get`, `aptitude`, `nm`, and `python3` to be installed.
 
 `bashreqs` assumes that the script runs fine on your computer before it searches for packages (this app should be run on the developer's computer to generate the dependency requirements.) However, **finding requirements, even if the package is not installed on your local computer** would be an awesome feature to add to `bashreqs.` Having said that, `bashreqs` will notify you if the bash program contains a package which is obsolete (i.e. cannot be re-installed on another computer, because it was installed from a deb file, or is no longer available in the official repos.)
 
@@ -33,4 +37,8 @@ Head on over to https://github.com/Decagon/bashreqs/releases/tag/v0.1-alpha to f
 
 ## Roadmap
 
-Using the flagged executables (warnings), check if they have the ability to call another program (e.g. strace can supervise another executable) so that requirements can be parsed more accurately.
+- using the flagged executables (warnings), check if they have the ability to call another program (e.g. strace can supervise another executable) so that requirements can be parsed more accurately.
+
+- attempt to find dependencies inside of an executable that is not managed with a package manager
+
+- add support for other package managers (e.g. rpm, yum, etc.)
