@@ -7,6 +7,7 @@ After cloning, run `pip3 install -r requirements.txt` then `python3 bashreqs.py 
 
 Needs `apt-get`, `aptitude`, `nm`, and `python3` to be installed.
 
+## How to use
 `bashreqs` assumes that the script runs fine on your computer before it searches for packages (this app should be run on the developer's computer to generate the dependency requirements.) `bashreqs` will notify you if the bash program contains a package which is obsolete (i.e. cannot be re-installed on another computer, because it was installed from a deb file, or is no longer available in the official repos.)
 
 Here's a report generated from https://github.com/topkecleon/telegram-bot-bash/blob/master/bashbot.sh (not affiliated with telegram-bot-bash):
