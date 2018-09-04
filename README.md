@@ -1,13 +1,13 @@
 # bashreqs
 pipreqs for bash scripts. Not affiliated with pipreqs.
 
-After cloning, run `pip3 install -r requirement.txt` then `python3 bashreqs.py path-to-bash-script` to generate a report containing all of the Debian and Ubuntu-based packages needed to run a bash script. If the executables are not packages, then `bashreqs` will just list the path to the executable.
+After cloning, run `pip3 install -r requirements.txt` then `python3 bashreqs.py path-to-bash-script` to generate a report containing all of the Debian and Ubuntu-based packages needed to run a bash script. If the executables are not packages, then `bashreqs` will just list the path to the executable.
 
 ## Requirements
 
 Needs `apt-get`, `aptitude`, `nm`, and `python3` to be installed.
 
-`bashreqs` assumes that the script runs fine on your computer before it searches for packages (this app should be run on the developer's computer to generate the dependency requirements.) However, **finding requirements, even if the package is not installed on your local computer** would be an awesome feature to add to `bashreqs.` Having said that, `bashreqs` will notify you if the bash program contains a package which is obsolete (i.e. cannot be re-installed on another computer, because it was installed from a deb file, or is no longer available in the official repos.)
+`bashreqs` assumes that the script runs fine on your computer before it searches for packages (this app should be run on the developer's computer to generate the dependency requirements.) `bashreqs` will notify you if the bash program contains a package which is obsolete (i.e. cannot be re-installed on another computer, because it was installed from a deb file, or is no longer available in the official repos.)
 
 Here's a report generated from https://github.com/topkecleon/telegram-bot-bash/blob/master/bashbot.sh (not affiliated with telegram-bot-bash):
 
