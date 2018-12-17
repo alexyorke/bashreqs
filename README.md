@@ -1,6 +1,8 @@
 # bashreqs
 pipreqs for bash scripts. Not affiliated with pipreqs.
 
+ `bashreqs` reads a bash script, and finds which programs the bash script needs to run. It then finds which packages would need to be installed to satisfy all of those dependencies. This creates a list of dependencies which can be used to install on another computer.
+
 After cloning, run `pip3 install -r requirements.txt` then `python3 bashreqs.py path-to-bash-script` to generate a report containing all of the Debian and Ubuntu-based packages needed to run a bash script. If the executables are not packages, then `bashreqs` will just list the path to the executable.
 
 ## Requirements
