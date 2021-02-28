@@ -1,5 +1,5 @@
 # bashreqs
-pipreqs for bash scripts. Not affiliated with pipreqs.
+pipreqs for bash scripts. Not affiliated with pipreqs. *Requires Python version 3.5.3 to build.*
 
  `bashreqs` reads a bash script, and finds which programs the bash script needs to run. It then finds which packages would need to be installed to satisfy all of those dependencies. This creates a list of dependencies which can be used to install on another computer.
 
